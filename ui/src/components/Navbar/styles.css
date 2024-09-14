@@ -1,0 +1,55 @@
+.drawerHeader {
+    display: flex !important;
+    justify-content: start !important;
+    padding-left: 20px !important;
+}
+
+
+.sidebarLogo {
+    height: 22px;
+    width: 22px;
+}
+
+
+.logoContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 4px;
+    cursor: pointer;
+}
+
+
+.list {
+    height: 100vh;
+    background-color: #0F1431;
+    color: #D3D2D3;
+}
+
+
+.navHeader {
+    background-color: #FFFFFF !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid #D3D2D3 !important;
+}
+
+
+.bellContainer {
+    border: 1px solid #D3D2D3 !important;
+    height: 40px !important;
+    width: 40px !important;
+    margin-top: 12px !important;
+    margin-right: 12px !important;
+}
+
+
+.bellIcon {
+    height: 30px !important;
+    width: 30px !important;
+    color: #D3D2D3 !important;
+}
+
+
+.color {
+    color: #5A5A5A !important;
+}

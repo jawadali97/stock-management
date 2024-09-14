@@ -1,35 +1,66 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+// import reactLogo from './assets/react.svg'
+// import viteLogo from '/vite.svg'
 import './App.css'
+import 'react-toastify/dist/ReactToastify.css';
+import { BrowserRouter, redirect, Route, Routes } from 'react-router-dom';
+import DashboardLayout from './components/DashboardLayout';
+import MealsManagement from './components/MealManagement';
+import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#0F1431',
+    },
+    secondary: {
+      main: '#888',
+    },
+  },
+});
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path='/'
+            element={
+              <DashboardLayout title={'Meal Management'}>
+                <MealsManagement />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path='/meal-management'
+            element={
+              <DashboardLayout title={'Meal Management'}>
+                <MealsManagement />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path='/products'
+            element={
+              <DashboardLayout title={'Manage Products'}>
+                <MealsManagement />
+              </DashboardLayout>
+            }
+          />
+          <Route
+            path='/product-orders'
+            element={
+              <DashboardLayout title={'Product Orders'}>
+                <MealsManagement />
+              </DashboardLayout>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
+  );
 }
 
 export default App
