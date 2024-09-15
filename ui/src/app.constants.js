@@ -1,23 +1,17 @@
-import { AccountCircle, LibraryBooks, Person, RequestPage } from "@mui/icons-material";
-import MealsManagement from "./components/MealManagement";
-
 export const sidebarList = [
     {
         key: 1,
         label: 'Meal Management',
-        // icon: <LibraryBooks sx={{ color: 'white' }} />,
         path: '/meal-management',
     },
     {
         key: 2,
         label: 'Manage Products',
-        // icon: <RequestPage sx={{ color: 'white' }} />,
         path: '/products'
     },
     {
         key: 3,
         label: 'Product Orders',
-        // icon: <RequestPage sx={{ color: 'white' }} />,
         path: '/product-orders'
     },
 ];
@@ -41,5 +35,9 @@ export const apiUrls = {
     userRequests: '/requests/user-requests',
     notifications: '/notifications',
     reminder: 'requests/reminder'
+};
 
-}
+export const unitOptions = [
+    { value: 'kg', label: 'kg' },
+    { value: 'pcs', label: 'pcs' },
+];

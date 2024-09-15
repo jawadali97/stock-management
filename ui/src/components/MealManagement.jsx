@@ -23,8 +23,8 @@ import { CheckBoxOutlineBlank, Delete } from '@mui/icons-material';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { useState, useEffect } from 'react';
 import { LoadingButton } from '@mui/lab';
-import BookService from '../services/book.service';
 import { useNavigate } from 'react-router-dom';
+import { unitOptions } from '../app.constants';
 
 const icon = <CheckBoxOutlineBlank fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -34,10 +34,6 @@ function BookForm({ selectedBook = {}, addUpdateMeal }) {
     // const [products, setProducts] = useState(['Meat', 'Tomato', 'Bun', 'Bread'])
     const [products, setProducts] = useState([]);
     const [selectedProducts, setSelectedProducts] = useState([]);
-    const unitOptions = [
-        { value: 'kg', label: 'kg' },
-        { value: 'pcs', label: 'pcs' },
-    ];
 
     const filter = createFilterOptions();
     const [isLoading, setIsLoading] = useState(false);
@@ -333,7 +329,7 @@ export default function MealsManagement({ }) {
             </Grid>
             {meals.length > 0 && <Grid item xs={12} px='300px'>
                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                    <TableContainer sx={{ maxHeight: 440 }}>
+                    <TableContainer sx={{ maxHeight: 500 }}>
                         <Table stickyHeader aria-label="simple table">
                             <TableHead sx={{ backgroundColor: '#0F1431' }}>
                                 <TableRow>
@@ -349,10 +345,6 @@ export default function MealsManagement({ }) {
                                         <TableCell>{index + 1}</TableCell>
                                         <TableCell>{meal.name}</TableCell>
                                         <TableCell >{meal.quantity}</TableCell>
-                                        {/* <TableCell >{meal.publicationDate}</TableCell>
-                                    <TableCell >{meal.available ? 'YES' : 'NO'}</TableCell>
-                                    <TableCell >{meal.shelf}</TableCell>
-                                    <TableCell >{meal.category}</TableCell> */}
                                         <TableCell >
                                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                                 <Button
@@ -366,11 +358,6 @@ export default function MealsManagement({ }) {
                                                     onClick={() => deleteMeal(meal._id)}>
                                                     <Delete sx={{ color: 'red' }} />
                                                 </IconButton>
-                                                {/* <IconButton
-                                                size='small'
-                                                onClick={() => editBook(book._id)}>
-                                                <Edit />
-                                            </IconButton> */}
                                             </div>
                                         </TableCell>
                                     </TableRow>

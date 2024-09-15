@@ -7,6 +7,8 @@ import { BrowserRouter, redirect, Route, Routes } from 'react-router-dom';
 import DashboardLayout from './components/DashboardLayout';
 import MealsManagement from './components/MealManagement';
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
+import ProductsManagement from './components/ProductsManagement';
+import Orders from './components/Orders';
 
 const theme = createTheme({
   palette: {
@@ -45,7 +47,7 @@ function App() {
             path='/products'
             element={
               <DashboardLayout title={'Manage Products'}>
-                <MealsManagement />
+                <ProductsManagement />
               </DashboardLayout>
             }
           />
@@ -53,7 +55,7 @@ function App() {
             path='/product-orders'
             element={
               <DashboardLayout title={'Product Orders'}>
-                <MealsManagement />
+                <Orders />
               </DashboardLayout>
             }
           />
