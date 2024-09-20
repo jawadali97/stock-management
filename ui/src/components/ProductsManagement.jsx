@@ -88,7 +88,7 @@ export default function ProductsManagement({ }) {
                                 <TableHead sx={{ backgroundColor: '#0F1431' }}>
                                     <TableRow>
                                         <TableCell width={50} sx={{ backgroundColor: '#0F1431', color: 'white' }}>Sr#</TableCell>
-                                        <TableCell width={150} sx={{ backgroundColor: '#0F1431', color: 'white' }}>Meal Name</TableCell>
+                                        <TableCell width={150} sx={{ backgroundColor: '#0F1431', color: 'white' }}>Product Name</TableCell>
                                         <TableCell width={150} sx={{ backgroundColor: '#0F1431', color: 'white' }}>Available Quantity</TableCell>
                                         {showFields && <TableCell width={180} align='left' sx={{ backgroundColor: '#0F1431', color: 'white' }}>Order Quantity</TableCell>}
                                     </TableRow>

@@ -1,15 +1,16 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import * as mongoose from 'mongoose';
 
 @Schema()
 export class Order extends Document {
-    @Prop({ required: true })
-    orderId: string;
+    @Prop()
+    orderId: number;
 
-    @Prop({ required: true })
+    @Prop({ default: Date.now })
     date: Date;
 
-    @Prop({ required: true })
+    @Prop({ default: 'Sent', enum: ['Sent', 'Accepted'] })
     status: string;
 
     @Prop([{ product: { type: Types.ObjectId, ref: 'Product' }, orderedQuantity: Number }])

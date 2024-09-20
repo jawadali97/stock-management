@@ -22,9 +22,9 @@ export default function Orders({ }) {
                 date: '10-20-2023',
                 status: 'Sent',
                 products: [
-                    { name: 'Meat', quantity: 3, unit: 'kg' },
-                    { name: 'Tomato', availableQuantity: 3, quantity: 3, unit: 'pcs' },
-                    { name: 'Bun', availableQuantity: 3, quantity: 3, unit: 'kg' },
+                    { name: 'Meat', orderedQuantity: 3, unit: 'kg' },
+                    { name: 'Tomato', orderedQuantity: 3, unit: 'pcs' },
+                    { name: 'Bun', orderedQuantity: 3, unit: 'kg' },
                 ]
             },
             {
@@ -32,9 +32,9 @@ export default function Orders({ }) {
                 date: '10-20-2023',
                 status: 'Accepted',
                 products: [
-                    { name: 'Meat', quantity: 3, unit: 'kg' },
-                    { name: 'Tomato', availableQuantity: 3, quantity: 3, unit: 'pcs' },
-                    { name: 'Bun', availableQuantity: 3, quantity: 3, unit: 'kg' },
+                    { name: 'Meat', orderedQuantity: 3, unit: 'kg' },
+                    { name: 'Tomato', orderedQuantity: 3, unit: 'pcs' },
+                    { name: 'Bun', orderedQuantity: 3, unit: 'kg' },
                 ]
             },
             {
@@ -42,9 +42,9 @@ export default function Orders({ }) {
                 date: '10-20-2023',
                 status: 'Sent',
                 products: [
-                    { name: 'Meat', quantity: 3, unit: 'kg' },
-                    { name: 'Tomato', availableQuantity: 3, quantity: 3, unit: 'pcs' },
-                    { name: 'Bun', availableQuantity: 3, quantity: 3, unit: 'kg' },
+                    { name: 'Meat', orderedQuantity: 3, unit: 'kg' },
+                    { name: 'Tomato', orderedQuantity: 3, unit: 'pcs' },
+                    { name: 'Bun', orderedQuantity: 3, unit: 'kg' },
                 ]
             },
             {
@@ -52,9 +52,9 @@ export default function Orders({ }) {
                 date: '10-20-2023',
                 status: 'Sent',
                 products: [
-                    { name: 'Meat', quantity: 3, unit: 'kg' },
-                    { name: 'Tomato', availableQuantity: 3, quantity: 3, unit: 'pcs' },
-                    { name: 'Bun', availableQuantity: 3, quantity: 3, unit: 'kg' },
+                    { name: 'Meat', orderedQuantity: 3, unit: 'kg' },
+                    { name: 'Tomato', orderedQuantity: 3, unit: 'pcs' },
+                    { name: 'Bun', orderedQuantity: 3, unit: 'kg' },
                 ]
             }
         ];
@@ -109,7 +109,7 @@ export default function Orders({ }) {
                                             <TableCell>{order.orderId}</TableCell>
                                             <TableCell >{order.date}</TableCell>
                                             <TableCell sx={{ display: 'flex', flexDirection: 'column' }}>
-                                                {order?.products.map(prod => (<span><b>{prod.name}</b>  {prod.quantity + prod.unit}</span>))}
+                                                {order?.products.map(prod => (<span><b>{prod.name}</b>  {prod.orderedQuantity + prod.unit}</span>))}
                                             </TableCell>
                                             <TableCell >{order.status}</TableCell>
                                             <TableCell sx={{ py: '0px' }}>

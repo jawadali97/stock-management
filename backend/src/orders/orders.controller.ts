@@ -16,7 +16,7 @@ export class OrdersController {
   }
 
   @Put(':id')
-  updateOrder(@Param('id') id: string, @Body() updateOrderDto: any) {
-    return this.ordersService.updateOrder(id, updateOrderDto);
+  acceptOrder(@Param('id') id: string) {
+    return this.ordersService.acceptOrder(id);
   }
 }
