@@ -12,24 +12,22 @@ export class MealsService {
     ) { }
 
     async createMeal(createMealDto: any): Promise<Meal> {
-        const productsList = createMealDto.products;
-        let minQuantity = Infinity;
+        // const productsList = createMealDto.products;
+        // let minQuantity = Infinity;
 
-        for (let item of productsList) {
-            const product = await this.productModel.findById(item.product).exec();
-            const possibleQuantity = product.availableQuantity / item.quantity;
-            minQuantity = Math.min(minQuantity, possibleQuantity);
-        }
+        // for (let item of productsList) {
+        //     const product = await this.productModel.findById(item.product).exec();
+        //     const possibleQuantity = product.availableQuantity / item.quantity;
+        //     minQuantity = Math.min(minQuantity, possibleQuantity);
+        // }
 
-        createMealDto.quantity = Math.floor(minQuantity);
+        // createMealDto.quantity = Math.floor(minQuantity);
         const createdMeal = new this.mealModel(createMealDto);
         return createdMeal.save();
     }
 
-    async sellMeal(id: string): Promise<Meal[]> {
-
+    async sellMeal(id: string): Promise<Meal> {
         const meal = await this.mealModel.findById(id).exec();
-
         if (meal) {
             const productsList = meal.products;
             for (let item of productsList) {
@@ -40,7 +38,31 @@ export class MealsService {
             }
         }
 
-        const allMeals = await this.mealModel.find().exec();
+        // const allMeals = await this.mealModel.find().exec();
+        // for (let meal of allMeals) {
+        //     const productsList = meal.products;
+        //     let minQuantity = Infinity;
+
+        //     for (let item of productsList) {
+        //         const product = await this.productModel.findById(item.product).exec();
+        //         const possibleQuantity = product.availableQuantity / item.quantity;
+        //         minQuantity = Math.min(minQuantity, possibleQuantity);
+        //     }
+
+        //     meal.quantity = Math.floor(minQuantity);
+        //     await meal.save();
+        // }
+        // return this.mealModel.find().populate('products.product').exec();
+
+        return meal;
+    }
+
+    async deleteMeal(id: string): Promise<any> {
+        return this.mealModel.findByIdAndDelete(id).exec();
+    }
+
+    async getAllMeals(): Promise<Meal[]> {
+        const allMeals = await this.mealModel.find().populate('products.product').exec();
         for (let meal of allMeals) {
             const productsList = meal.products;
             let minQuantity = Infinity;
@@ -50,18 +72,8 @@ export class MealsService {
                 const possibleQuantity = product.availableQuantity / item.quantity;
                 minQuantity = Math.min(minQuantity, possibleQuantity);
             }
-
             meal.quantity = Math.floor(minQuantity);
-            await meal.save();
         }
-        return this.mealModel.find().populate('products.product').exec();
-    }
-
-    async deleteMeal(id: string): Promise<any> {
-        return this.mealModel.findByIdAndDelete(id).exec();
-    }
-
-    async getAllMeals(): Promise<Meal[]> {
-        return this.mealModel.find().populate('products.product').exec();
+        return allMeals;
     }
 }
