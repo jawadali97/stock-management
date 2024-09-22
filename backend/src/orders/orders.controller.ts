@@ -15,6 +15,10 @@ export class OrdersController {
     return this.ordersService.getAllOrders();
   }
 
+  /**
+   * Update the status of order
+   * @param id order ID
+   */
   @Get(':id')
   acceptOrder(@Param('id') id: string) {
     return this.ordersService.acceptOrder(id);

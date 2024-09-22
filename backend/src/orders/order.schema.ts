@@ -5,7 +5,7 @@ import * as mongoose from 'mongoose';
 @Schema()
 export class Order extends Document {
     @Prop()
-    orderId: number;
+    orderId: number; // Auto incremental ID value
 
     @Prop({ default: Date.now })
     date: Date;
@@ -14,7 +14,7 @@ export class Order extends Document {
     status: string;
 
     @Prop([{ product: { type: Types.ObjectId, ref: 'Product' }, orderedQuantity: Number }])
-    products: { product: Types.ObjectId, orderedQuantity: number }[];
+    products: { product: Types.ObjectId, orderedQuantity: number }[]; // Id of the product associated with Products collection
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);

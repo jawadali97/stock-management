@@ -20,9 +20,15 @@ export class OrdersService {
         return this.orderModel.find().populate('products.product').exec();
     }
 
+    /**
+     * Uppdate the status of order to Accepted and update orderd products quantity
+     * @param id order Id
+     * @returns 
+     */
     async acceptOrder(id: string): Promise<any> {
         const acceptedOrder = await this.orderModel.findByIdAndUpdate(id, { status: 'Accepted' }, { new: true }).exec();
 
+        // Update orderd products quantity
         if (acceptedOrder) {
             const products = acceptedOrder.products;
             for (let item of products) {

@@ -7,6 +7,11 @@ import { Product } from './product.schema';
 export class ProductsService {
     constructor(@InjectModel(Product.name) private productModel: Model<Product>) { }
 
+    /**
+     * Add new product in DB
+     * @param createProductDto // Data to be stored in DB
+     * @returns 
+     */
     async addProduct(createProductDto: any): Promise<Product> {
         const createdProduct = new this.productModel(createProductDto);
         return createdProduct.save();

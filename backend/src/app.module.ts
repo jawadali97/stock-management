@@ -7,7 +7,6 @@ import { MealsModule } from './meals/meals.module';
 import { ProductsModule } from './products/products.module';
 import { OrdersModule } from './orders/orders.module';
 import configuration from 'environment/config';
-
 import { MealsController } from './meals/meals.controller';
 import { MealsService } from './meals/meals.service';
 import { ProductSchema } from './products/product.schema';
@@ -20,11 +19,13 @@ import { ProductsService } from './products/products.service';
 
 @Module({
   imports: [
+    // Connect to MongoDB
     MongooseModule.forRootAsync({
       useFactory: async (config) => ({
         uri: `${process.env.MONGO_DB_URL}`,
       })
     }),
+    // Get env variables based on environment
     ConfigModule.forRoot({
       envFilePath: `${process.cwd()}/environment/${process.env.NODE_ENV || 'development'}.env`,
       isGlobal: true,

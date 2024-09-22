@@ -13,7 +13,7 @@ import * as AutoIncrementFactory from 'mongoose-sequence';
     MongooseModule.forFeatureAsync([
       {
         name: 'Order',
-        useFactory: async (connection: Connection) => {
+        useFactory: async (connection: Connection) => { // Auto increment plugin configuration
           const schema = OrderSchema;
           const AutoIncrement = AutoIncrementFactory(connection);
           schema.plugin(AutoIncrement, { inc_field: 'orderId' });
