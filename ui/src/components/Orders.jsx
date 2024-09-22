@@ -39,6 +39,11 @@ export default function Orders({ }) {
         }
     };
 
+    /**
+     * Format timestamp to dd-mm-yyyy format
+     * @param {*} timestamp 
+     * @returns 
+     */
     const dateFormat = (timestamp) => {
         // Create a Date object from the timestamp string
         const dateObject = new Date(timestamp);

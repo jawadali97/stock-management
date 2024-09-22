@@ -1,11 +1,9 @@
 
-// import axios from "axios";
-// import { Product } from "./interfaces";
-
-import { apiUrls } from "../app.constants";
 import axiosInstance from "./axios";
-import axios from "axios";
 
+/**
+ * Api service class to define http methods with axios
+ */
 export class ApiService {
     static async get(url, params = {}) {
         try {
@@ -30,7 +28,6 @@ export class ApiService {
             const response = await axiosInstance.put(`${url}/${id}`, data);
             return response;
         } catch (error) {
-            // throw new Error('Error updating product');
             return Promise.reject(error);
         }
     }
@@ -40,7 +37,7 @@ export class ApiService {
             const response = await axiosInstance.delete(url);
             return response;
         } catch (error) {
-            throw new Error('Error deleting product');
+            return Promise.reject(error);
         }
     }
 }

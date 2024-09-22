@@ -26,6 +26,10 @@ function ProductForm({ addProduct }) {
     const [unit, setUnit] = useState('kg');
     const [isLoading, setIsLoading] = useState(false);
 
+    /**
+     * Event handler to handle save button
+     * @param {*} event 
+     */
     const handleSubmit = (event) => {
         event.preventDefault();
         setIsLoading(true);
@@ -137,6 +141,10 @@ export default function ProductsManagement({ }) {
         }
     };
 
+    /**
+     * Event handler to handle Order button click
+     * @param {*} e 
+     */
     const placeOrder = async (e) => {
         e.preventDefault();
         setIsLoading(true);
@@ -163,13 +171,13 @@ export default function ProductsManagement({ }) {
     };
 
     // Event handler to update the unit
-    const handleUnitChange = (index, newUnit) => {
-        setProducts(prevProducts =>
-            prevProducts.map((product, i) =>
-                i === index ? { ...product, unit: newUnit } : product
-            )
-        );
-    };
+    // const handleUnitChange = (index, newUnit) => {
+    //     setProducts(prevProducts =>
+    //         prevProducts.map((product, i) =>
+    //             i === index ? { ...product, unit: newUnit } : product
+    //         )
+    //     );
+    // };
 
     return (
 

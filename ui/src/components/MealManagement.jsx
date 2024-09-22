@@ -37,8 +37,14 @@ function MealForm({ addUpdateMeal }) {
     const [isLoading, setIsLoading] = useState(false);
     const filter = createFilterOptions();
 
+    /**
+     * Hook called on page load
+     */
     useEffect(() => { fetchProducts() }, []);
 
+    /**
+     * Function to make API call to fetch products
+     */
     const fetchProducts = async () => {
         try {
             const response = await ProductsService.getAllProducts();
@@ -48,6 +54,10 @@ function MealForm({ addUpdateMeal }) {
         }
     }
 
+    /**
+     * Handler function to handle save button
+     * @param {*} event 
+     */
     const handleSubmit = (event) => {
         event.preventDefault();
         setIsLoading(true);
@@ -56,19 +66,20 @@ function MealForm({ addUpdateMeal }) {
             products: selectedProducts.map(prod => ({ product: prod._id, quantity: prod.quantity })),
         }
         addUpdateMeal(data);
-        // clearForm()
         setIsLoading(false);
     };
 
-    const clearForm = () => {
-        setName('');
-        setSelectedProducts([]);
-    }
-
+    /**
+     * Function to handle the products selection
+     * @param {*} newValue  list of all selected products
+     */
     const handleProductChange = async (newValue) => {
         let newAddedProd = null;
+
+        // Check if there is a new product to add that not exist in the list
         const newProductToAdd = newValue.find(item => item.inputValue && !selectedProducts.find(prod => prod.name === item.inputValue));
         if (newProductToAdd) {
+            // Add new product to DB
             try {
                 const newProd = {
                     name: newProductToAdd.inputValue,
@@ -83,6 +94,7 @@ function MealForm({ addUpdateMeal }) {
             }
         }
 
+        //  Clean the selected products list and update state
         const cleanedNewValue = newValue.map(item => newAddedProd && item.inputValue === newAddedProd.name ? newAddedProd : item);
         const updatedValues = cleanedNewValue.map(value => ({ ...value, name: value.inputValue || value.name }))
             .map(val => {
@@ -102,13 +114,13 @@ function MealForm({ addUpdateMeal }) {
     };
 
     // Event handler to update the unit
-    const handleUnitChange = (index, newUnit) => {
-        setSelectedProducts(prevProducts =>
-            prevProducts.map((product, i) =>
-                i === index ? { ...product, unit: newUnit } : product
-            )
-        );
-    };
+    // const handleUnitChange = (index, newUnit) => {
+    //     setSelectedProducts(prevProducts =>
+    //         prevProducts.map((product, i) =>
+    //             i === index ? { ...product, unit: newUnit } : product
+    //         )
+    //     );
+    // };
 
 
     return (
@@ -251,6 +263,9 @@ export default function MealsManagement({ }) {
         fetchMeals();
     }, []);
 
+    /**
+     * Fetch all meals from DB
+     */
     const fetchMeals = async () => {
         try {
             const response = await MealsService.getAllMeals();
@@ -260,6 +275,11 @@ export default function MealsManagement({ }) {
         }
     };
 
+    /**
+     * Make API call to delete a meal
+     * @param {*} e 
+     * @param {*} id 
+     */
     const deleteMeal = async (e, id) => {
         e.preventDefault();
         try {

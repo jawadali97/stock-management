@@ -1,9 +1,6 @@
-import { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
 import './App.css'
 import 'react-toastify/dist/ReactToastify.css';
-import { BrowserRouter, redirect, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import DashboardLayout from './components/DashboardLayout';
 import MealsManagement from './components/MealManagement';
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
@@ -21,6 +18,9 @@ const theme = createTheme({
   },
 });
 
+/**
+ * Define component routes
+ */
 function App() {
   return (
     <ThemeProvider theme={theme}>
