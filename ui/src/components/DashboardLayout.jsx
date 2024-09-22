@@ -1,6 +1,5 @@
 import { Box, Typography } from "@mui/material";
 import SideBar from './Navbar/Sidebar'
-import restaurant from '../assets/restaurant.jpg'
 
 export default function DashboardLayout({ children, title }) {
 
@@ -37,7 +36,6 @@ export default function DashboardLayout({ children, title }) {
                     alignItems: 'center'
                 }}>{children}</main>
             </div>
-
         </div>
     )
 }

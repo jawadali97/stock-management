@@ -6,7 +6,6 @@ import './styles.css';
 import { sidebarList } from "../../app.constants";
 import { LocalLibrary } from "@mui/icons-material";
 
-
 const drawerWidth = 280;
 
 const openedMixin = (theme) => ({
@@ -57,7 +56,6 @@ const Drawer = styled(MuiDrawer, {
     }),
 }));
 
-
 export default function Sidebar() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(true);
@@ -72,15 +70,9 @@ export default function Sidebar() {
         }
     }, [isSmallScreen]);
 
-
     const handleDrawerToggel = () => {
         setOpen(!open);
     };
-
-    const onLogout = () => {
-        localStorage.clear();
-        navigate('/signin');
-    }
 
     return (
         <Box sx={{ display: "flex" }}>
@@ -147,9 +139,6 @@ export default function Sidebar() {
                             </ListItemButton>
                         </ListItem>
                     ))}
-                    {/* <ListItem>
-                        <Button fullWidth variant="outlined" sx={{ color: 'white' }} onClick={onLogout}>Logout</Button>
-                    </ListItem> */}
                 </List>
             </Drawer>
         </Box>

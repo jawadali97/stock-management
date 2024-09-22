@@ -15,7 +15,7 @@ export class OrdersController {
     return this.ordersService.getAllOrders();
   }
 
-  @Put(':id')
+  @Get(':id')
   acceptOrder(@Param('id') id: string) {
     return this.ordersService.acceptOrder(id);
   }

@@ -23,44 +23,41 @@ import { CheckBoxOutlineBlank, Delete } from '@mui/icons-material';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { useState, useEffect } from 'react';
 import { LoadingButton } from '@mui/lab';
-import { useNavigate } from 'react-router-dom';
 import { unitOptions } from '../app.constants';
+import MealsService from '../services/meals.service';
+import ProductsService from '../services/products.service';
 
 const icon = <CheckBoxOutlineBlank fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
-function BookForm({ selectedBook = {}, addUpdateMeal }) {
+function MealForm({ addUpdateMeal }) {
     const [name, setName] = useState('');
-    // const [products, setProducts] = useState(['Meat', 'Tomato', 'Bun', 'Bread'])
     const [products, setProducts] = useState([]);
     const [selectedProducts, setSelectedProducts] = useState([]);
-
-    const filter = createFilterOptions();
     const [isLoading, setIsLoading] = useState(false);
-    const navigate = useNavigate();
+    const filter = createFilterOptions();
 
-    useEffect(() => {
-        const productsData = [
-            { name: 'Meat' },
-            { name: 'Tomato' },
-            { name: 'Bun' },
-            { name: 'Bread' }
-        ];
-        setProducts(productsData)
-    }, []);
+    useEffect(() => { fetchProducts() }, []);
+
+    const fetchProducts = async () => {
+        try {
+            const response = await ProductsService.getAllProducts();
+            setProducts(response.data);
+        } catch (error) {
+            console.error('Error fetching products:', error);
+        }
+    }
 
     const handleSubmit = (event) => {
         event.preventDefault();
         setIsLoading(true);
-
         const data = {
             name,
-            products: selectedProducts,
+            products: selectedProducts.map(prod => ({ product: prod._id, quantity: prod.quantity })),
         }
         addUpdateMeal(data);
         // clearForm()
         setIsLoading(false);
-        console.log(data)
     };
 
     const clearForm = () => {
@@ -68,15 +65,31 @@ function BookForm({ selectedBook = {}, addUpdateMeal }) {
         setSelectedProducts([]);
     }
 
-    const handleProductChange = (newValue) => {
-        const newValues = newValue.map((value) => ({ name: value.inputValue || value.name }));
-        const updatedList = newValues.map(val => {
-            const prod = selectedProducts.find(prod => prod.name === val.name);
-            return prod || { ...val, quantity: 0, unit: 'kg' }
-        });
-        setSelectedProducts([...updatedList]);
-        // const elementsNotInProducts = newValues.filter(newValue => !products.some(product => product.name === newValue.name));
-        // setProducts([...products, ...elementsNotInProducts]);
+    const handleProductChange = async (newValue) => {
+        let newAddedProd = null;
+        const newProductToAdd = newValue.find(item => item.inputValue && !selectedProducts.find(prod => prod.name === item.inputValue));
+        if (newProductToAdd) {
+            try {
+                const newProd = {
+                    name: newProductToAdd.inputValue,
+                    availableQuantity: 0,
+                    unit: 'kg'
+                };
+                const response = await ProductsService.createProduct(newProd);
+                newAddedProd = response.data;
+                setProducts([...products, newAddedProd]);
+            } catch (error) {
+                console.error('Error adding new product:', error);
+            }
+        }
+
+        const cleanedNewValue = newValue.map(item => newAddedProd && item.inputValue === newAddedProd.name ? newAddedProd : item);
+        const updatedValues = cleanedNewValue.map(value => ({ ...value, name: value.inputValue || value.name }))
+            .map(val => {
+                const prod = selectedProducts.find(prod => prod.name === val.name);
+                return prod || { ...val, quantity: 0 }
+            });
+        setSelectedProducts([...updatedValues]);
     };
 
     // Event handler to update the quantity
@@ -134,26 +147,12 @@ function BookForm({ selectedBook = {}, addUpdateMeal }) {
                         id="products"
                         options={products}
                         // value={selectedProducts}
-                        onChange={(event, newValue) => {
-                            // if (typeof newValue === 'string') {
-                            //     handleProductChange(newValue.name)
-                            //     // setProductValue(newValue);
-                            // } else 
-                            // if (newValue && newValue.inputValue) {
-                            //     // Create a new value from the user input
-                            //     handleProductChange(newValue.inputValue)
-                            //     // setProductValue(newValue.inputValue);
-                            //     // setProducts([...products, { name: newValue.inputValue }])
-                            // } else {
-                            //     // setProductValue(newValue);
-                            // }
-                            handleProductChange(newValue)
-                        }}
+                        onChange={(event, newValue) => handleProductChange(newValue)}
                         filterOptions={(options, params) => {
                             const filtered = filter(options, params);
                             const { inputValue } = params;
                             // Suggest the creation of a new value
-                            const isExisting = options.some((option) => inputValue === option);
+                            const isExisting = options.find((option) => inputValue.toLowerCase() === option.name.toLowerCase());
                             if (inputValue !== '' && !isExisting) {
                                 filtered.push({
                                     inputValue,
@@ -212,7 +211,7 @@ function BookForm({ selectedBook = {}, addUpdateMeal }) {
                                 />
                             </Grid>
                             <Grid item xs={4}>
-                                <FormControl >
+                                {/* <FormControl >
                                     <Select
                                         size='small'
                                         value={product.unit}
@@ -224,7 +223,7 @@ function BookForm({ selectedBook = {}, addUpdateMeal }) {
                                             </MenuItem>
                                         ))}
                                     </Select>
-                                </FormControl>
+                                </FormControl> */}
                             </Grid>
                         </Grid>
                     ))}
@@ -246,86 +245,53 @@ function BookForm({ selectedBook = {}, addUpdateMeal }) {
 }
 
 export default function MealsManagement({ }) {
-
     const [meals, setMeals] = useState([])
-    const [selectedBook, setSelectedBook] = useState({})
-    const navigate = useNavigate();
 
     useEffect(() => {
-        const mealsData = [
-            {
-                _id: '123345',
-                name: 'Burger',
-                quantity: 6
-            },
-            {
-                _id: '123346',
-                name: 'Pizza',
-                quantity: 6
-            }
-        ];
-        setMeals(mealsData);
-
-        // if (!localStorage.getItem('token')) {
-        //     navigate('/signin')
-        // }
-
-        // BookService.getAllBooks().then((data) => {
-        //     setBooks(data);
-        // }).catch((err) => {
-        //     console.log(err);
-        //     if (err.response.data.statusCode === 403) {
-        //         navigate('/signin');
-        //     }
-        // });
+        fetchMeals();
     }, []);
 
-    const deleteMeal = (id) => {
-        // BookService.deleteBook(id).then((data) => {
-        //     setBooks(books.filter(book => book._id !== id));
-        // }).catch((err) => {
-        //     console.log(err);
-        //     if (err.response.data.statusCode === 403) {
-        //         navigate('/signin');
-        //     }
-        // });
+    const fetchMeals = async () => {
+        try {
+            const response = await MealsService.getAllMeals();
+            setMeals(response.data);
+        } catch (error) {
+            console.error('Error fetching products:', error);
+        }
+    };
+
+    const deleteMeal = async (e, id) => {
+        e.preventDefault();
+        try {
+            const response = await MealsService.deleteMeal(id);
+            setMeals(meals.filter(meal => meal._id !== response.data._id));
+        } catch (error) {
+            console.error('Error fetching products:', error);
+        }
     }
 
-    // const editBook = (id) => {
-    //     setSelectedBook(books.find(book => book._id === id));
-    // }
+    const onSellMeal = async (id) => {
+        try {
+            const response = await MealsService.sellMeal(id);
+            fetchMeals();
+        } catch (error) {
+            console.error('Error selling meal:', error);
+        }
+    }
 
-    const addUpdateMeal = (meal) => {
-        // TODO: save meal in DB, Fetch latest meals and update state
-
-        setMeals([...meals, meal])
-        // if (book._id && book._id === selectedBook._id) {
-        //     // Update book
-        //     BookService.updateBook(book._id, book).then((data) => {
-        //         setBooks(books.map(book => book._id === data._id ? data : book));
-        //     }).catch((err) => {
-        //         console.log(err);
-        //         if (err.response.data.statusCode === 403) {
-        //             navigate('/signin');
-        //         }
-        //     });
-        // } else {
-        //     // Add book
-        //     BookService.addBook(book).then((data) => {
-        //         setBooks((books) => [...books, data]);
-        //     }).catch((err) => {
-        //         console.log(err);
-        //         if (err.response.data.statusCode === 403) {
-        //             navigate('/signin');
-        //         }
-        //     })
-        // }
+    const addMeal = async (mealData) => {
+        try {
+            const response = await MealsService.createMeal(mealData);
+            fetchMeals();
+        } catch (error) {
+            console.error('Error adding new meal:', error);
+        }
     }
 
     return (
         <Grid container>
             <Grid item xs={12} px='200px'>
-                <BookForm addUpdateMeal={addUpdateMeal} />
+                <MealForm addUpdateMeal={addMeal} />
             </Grid>
             {meals.length > 0 && <Grid item xs={12} px='300px'>
                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -348,14 +314,16 @@ export default function MealsManagement({ }) {
                                         <TableCell >
                                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                                                 <Button
+                                                    disabled={meal.quantity === 0}
                                                     size='small'
                                                     variant='outlined'
+                                                    onClick={() => onSellMeal(meal._id)}
                                                 >
                                                     Sell
                                                 </Button>
                                                 <IconButton
                                                     size='small'
-                                                    onClick={() => deleteMeal(meal._id)}>
+                                                    onClick={(e) => deleteMeal(e, meal._id)}>
                                                     <Delete sx={{ color: 'red' }} />
                                                 </IconButton>
                                             </div>

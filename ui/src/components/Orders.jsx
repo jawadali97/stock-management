@@ -11,63 +11,32 @@ import {
     TableRow,
 } from '@mui/material';
 import { useState, useEffect } from 'react';
+import OrdersService from '../services/orders.service';
 
 export default function Orders({ }) {
     const [orders, setOrders] = useState([]);
 
     useEffect(() => {
-        const ordersData = [
-            {
-                orderId: '120',
-                date: '10-20-2023',
-                status: 'Sent',
-                products: [
-                    { name: 'Meat', orderedQuantity: 3, unit: 'kg' },
-                    { name: 'Tomato', orderedQuantity: 3, unit: 'pcs' },
-                    { name: 'Bun', orderedQuantity: 3, unit: 'kg' },
-                ]
-            },
-            {
-                orderId: '121',
-                date: '10-20-2023',
-                status: 'Accepted',
-                products: [
-                    { name: 'Meat', orderedQuantity: 3, unit: 'kg' },
-                    { name: 'Tomato', orderedQuantity: 3, unit: 'pcs' },
-                    { name: 'Bun', orderedQuantity: 3, unit: 'kg' },
-                ]
-            },
-            {
-                orderId: '124',
-                date: '10-20-2023',
-                status: 'Sent',
-                products: [
-                    { name: 'Meat', orderedQuantity: 3, unit: 'kg' },
-                    { name: 'Tomato', orderedQuantity: 3, unit: 'pcs' },
-                    { name: 'Bun', orderedQuantity: 3, unit: 'kg' },
-                ]
-            },
-            {
-                orderId: '125',
-                date: '10-20-2023',
-                status: 'Sent',
-                products: [
-                    { name: 'Meat', orderedQuantity: 3, unit: 'kg' },
-                    { name: 'Tomato', orderedQuantity: 3, unit: 'pcs' },
-                    { name: 'Bun', orderedQuantity: 3, unit: 'kg' },
-                ]
-            }
-        ];
-        setOrders(ordersData);
-    }, [])
+        fetchOrders();
+    }, []);
+
+    const fetchOrders = async () => {
+        try {
+            const response = await OrdersService.getAllOrders();
+            setOrders(response.data);
+        } catch (error) {
+            console.error('Error fetching orders:', error);
+        }
+    };
 
     // Event handler to update the quantity
-    const onAcceptClick = (index) => {
-        setOrders(prevOrders =>
-            prevOrders.map((order, i) =>
-                i === index ? { ...order, status: 'Accepted' } : order
-            )
-        );
+    const onAcceptClick = async (id) => {
+        try {
+            const response = await OrdersService.acceptOrder(id);
+            fetchOrders();
+        } catch (error) {
+            console.error('Error accepting order:', error);
+        }
     };
 
     const dateFormat = (timestamp) => {
@@ -85,11 +54,11 @@ export default function Orders({ }) {
 
     return (
 
-        <Grid container pt={8}>
+        <Grid container pt={8} textAlign='center'>
             <Grid item xs={12}>
                 <h2>Orders</h2>
             </Grid>
-            {orders.length > 0 &&
+            {orders.length > 0 ?
                 <Grid item xs={12} px='300px'>
                     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                         <TableContainer sx={{ maxHeight: 500 }}>
@@ -107,9 +76,9 @@ export default function Orders({ }) {
                                     {orders.map((order, index) => (
                                         <TableRow key={index} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                             <TableCell>{order.orderId}</TableCell>
-                                            <TableCell >{order.date}</TableCell>
+                                            <TableCell >{dateFormat(order.date)}</TableCell>
                                             <TableCell sx={{ display: 'flex', flexDirection: 'column' }}>
-                                                {order?.products.map(prod => (<span><b>{prod.name}</b>  {prod.orderedQuantity + prod.unit}</span>))}
+                                                {order?.products.map((prod, i) => (<span key={i}><b>{prod?.product.name}</b> - {prod.orderedQuantity + prod?.product.unit}</span>))}
                                             </TableCell>
                                             <TableCell >{order.status}</TableCell>
                                             <TableCell sx={{ py: '0px' }}>
@@ -117,7 +86,7 @@ export default function Orders({ }) {
                                                     disabled={order.status !== 'Sent'}
                                                     size='small'
                                                     variant='outlined'
-                                                    onClick={(e) => onAcceptClick(index)}
+                                                    onClick={(e) => onAcceptClick(order._id)}
                                                 >
                                                     Accept
                                                 </Button>
@@ -128,7 +97,11 @@ export default function Orders({ }) {
                             </Table>
                         </TableContainer>
                     </Paper>
-                </Grid>}
+                </Grid>
+                : <Grid item xs={12}>
+                    <div>There are not any orders yet</div>
+                </Grid>
+            }
         </Grid>
     )
 }

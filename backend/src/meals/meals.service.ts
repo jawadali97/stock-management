@@ -63,17 +63,19 @@ export class MealsService {
 
     async getAllMeals(): Promise<Meal[]> {
         const allMeals = await this.mealModel.find().populate('products.product').exec();
+        const mealsResponse = [];
         for (let meal of allMeals) {
             const productsList = meal.products;
             let minQuantity = Infinity;
 
             for (let item of productsList) {
                 const product = await this.productModel.findById(item.product).exec();
-                const possibleQuantity = product.availableQuantity / item.quantity;
+                const possibleQuantity = (product.availableQuantity / item.quantity) || 0;
                 minQuantity = Math.min(minQuantity, possibleQuantity);
             }
             meal.quantity = Math.floor(minQuantity);
+            mealsResponse.push(meal);
         }
-        return allMeals;
+        return mealsResponse;
     }
 }
